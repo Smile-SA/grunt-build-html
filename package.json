@@ -1,0 +1,42 @@
+{
+  "name": "grunt-build-html",
+  "description": "Build HTML templates recursively",
+  "version": "0.0.1",
+  "homepage": "https://github.com/tonai/grunt-build-html",
+  "author": {
+    "name": "Tony Cabaye",
+    "email": "tonai59@gmail.com",
+    "url": "https://github.com/tonai"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/tonai/grunt-build-html.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tonai/grunt-build-html/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/tonai/grunt-build-html/blob/master/LICENSE"
+    }
+  ],
+  "main": "Gruntfile.js",
+  "engines": {
+    "node": ">= 0.10.4"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "peerDependencies": {
+    "grunt": "~0.4.1"
+  },
+  "keywords": [
+    "gruntplugin",
+    "grunt",
+    "template",
+    "preprocessing",
+    "html",
+    "compile"
+  ],
+  "readmeFilename": "README.md"
+}
