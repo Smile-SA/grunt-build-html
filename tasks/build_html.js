@@ -1,8 +1,16 @@
+/*
+ * grunt-build-html
+ * https://github.com/tonai/grunt-build-html
+ *
+ * Copyright (c) 2013 Tony Cabaye
+ * Licensed under the MIT license.
+ */
+ 
 'use strict';
 
 module.exports = function(grunt) {
-  var path = require('path');
-  var _    = grunt.util._;
+  var path      = require('path');
+  var _         = grunt.util._;
   var backtrace = function(files) {
     var message = '[backtrace] : ';
     for (var i in files) {
@@ -11,10 +19,14 @@ module.exports = function(grunt) {
     grunt.log.debug(message);
   };
 
-  grunt.registerMultiTask('buildhtml', 'Build templates into plain HTML', function() {
+  grunt.registerMultiTask('build_html', 'Build HTML templates recursively.', function() {
     var include = null;
     var templates    = {};
+
+    // Merge task-specific and/or target-specific options with these defaults.
     var options      = this.options({
+      punctuation: '.',
+      separator: ', ',
       templates: []
     });
 
@@ -53,37 +65,40 @@ module.exports = function(grunt) {
       };
     });
 
-    // Iterate over all src-dest file pairs.
+    // Iterate over all specified file groups.
     this.files.forEach(function(file) {
-      var content = file.src
-        .filter(function(filepath) {
-          // Warn on and remove invalid source files (if nonull was set).
-          if (!grunt.file.exists(filepath)) {
-            grunt.log.warn('Source file "' + filepath + '" not found.');
-            return false;
-          } else {
-            return true;
-          }
-        }).map(function(filepath) {
-          var html = '';
-          var templateData = {files: [filepath]};
-          templateData.include = include.bind(templateData);
-          options.filename = filepath;
-          try {
-            html = _.template(grunt.file.read(filepath), templateData);
-          } catch (error) {
-            grunt.log.error(error.message);
-            backtrace(templateData.files);
-          }
-          return html;
-        })
-        .join(grunt.util.normalizelf(grunt.util.linefeed));
+      // Concat specified files.
+      var src = file.src.filter(function(filepath) {
+        // Warn on and remove invalid source files (if nonull was set).
+        if (!grunt.file.exists(filepath)) {
+          grunt.log.warn('Source file "' + filepath + '" not found.');
+          return false;
+        } else {
+          return true;
+        }
+      }).map(function(filepath) {
+        var html = '';
+        var templateData = {files: [filepath]};
+        templateData.include = include.bind(templateData);
+        options.filename = filepath;
+        try {
+          html = _.template(grunt.file.read(filepath), templateData);
+        } catch (error) {
+          grunt.log.error(error.message);
+          backtrace(templateData.files);
+        }
+        return html;
+      }).join(grunt.util.normalizelf(options.separator));
+
+      // Handle options.
+      src += options.punctuation;
 
       // Write the destination file.
-      grunt.file.write(file.dest, content);
+      grunt.file.write(file.dest, src);
 
       // Print a success message.
       grunt.log.ok('Build HTML file to "' + file.dest + '"');
     });
   });
+
 };
