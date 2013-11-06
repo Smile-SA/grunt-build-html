@@ -37,17 +37,11 @@ grunt.initConfig({
 
 ### Options
 
-#### options.separator
-Type: `String`
-Default value: `',  '`
+#### options.templates
+Type: String|Array
 
-A string value that is used to do something with whatever.
-
-#### options.punctuation
-Type: `String`
-Default value: `'.'`
-
-A string value that is used to do something else with whatever else.
+Lets you specify which files you want to be available as partials you can include in files or in other partials (avoid infinite loops). 
+Globbing supported.
 
 ### Usage Examples
 
@@ -71,10 +65,7 @@ In this example, custom options are used to do something else with whatever else
 ```js
 grunt.initConfig({
   build_html: {
-    options: {
-      separator: ': ',
-      punctuation: ' !!!',
-    },
+    options: {},
     files: {
       'dest/default_options': ['src/testing', 'src/123'],
     },

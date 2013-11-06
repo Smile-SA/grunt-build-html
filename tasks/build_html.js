@@ -20,13 +20,11 @@ module.exports = function(grunt) {
   };
 
   grunt.registerMultiTask('build_html', 'Build HTML templates recursively.', function() {
-    var include = null;
-    var templates    = {};
+    var include   = null;
+    var templates = {};
 
     // Merge task-specific and/or target-specific options with these defaults.
-    var options      = this.options({
-      punctuation: '.',
-      separator: ', ',
+    var options = this.options({
       templates: []
     });
 
@@ -88,10 +86,7 @@ module.exports = function(grunt) {
           backtrace(templateData.files);
         }
         return html;
-      }).join(grunt.util.normalizelf(options.separator));
-
-      // Handle options.
-      src += options.punctuation;
+      }).join(grunt.util.normalizelf(grunt.util.linefeed));
 
       // Write the destination file.
       grunt.file.write(file.dest, src);
