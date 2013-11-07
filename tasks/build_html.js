@@ -21,13 +21,26 @@ module.exports = function(grunt) {
   };
 
   grunt.registerMultiTask('build_html', 'Build HTML templates recursively.', function() {
-    var include   = null;
-    var templates = {};
+    var include          = null;
+    var templates        = {};
+    var templateSettings = {};
 
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
       templates: []
     });
+
+    // Manage template settings
+    if (options.interpolate !== undefined) {
+      templateSettings.interpolate = options.interpolate;
+    }
+    if (options.escape !== undefined) {
+      templateSettings.escape = options.escape;
+    }
+    if (options.evaluate !== undefined) {
+      templateSettings.evaluate = options.evaluate;
+    }
+    _.templateSettings = templateSettings;
 
     // Include method to be used in HTML files.
     include = function(tplName, data) {
