@@ -63,6 +63,12 @@ exports.build_html = {
     test.equal(actual, expected, 'load a module overriding a default parameter.');
     test.done();
   },
+  processSubfolder: function(test) {
+    var actual = grunt.file.read('tmp/subfolder/nothing-to-do.html');
+    var expected = grunt.file.read('test/expected/subfolder/nothing-to-do.html');
+    test.equal(actual, expected, 'folder tree structure is not altered.');
+    test.done();
+  },
   simpleGridSystem: function(test) {
     var actual = grunt.file.read('tmp/simple-grid.html');
     var expected = grunt.file.read('test/expected/simple-grid.html');
