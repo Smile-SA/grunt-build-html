@@ -15,9 +15,9 @@ module.exports = function(grunt) {
   var backtrace = function(files) {
     var message = '[backtrace] : ';
     for (var i in files) {
-      message += '\n' + files[i];
+      message += grunt.util.linefeed + files[i];
     }
-    grunt.log.debug(message);
+    debug(grunt.util.normalizelf(message));
   };
 
   grunt.registerMultiTask('build_html', 'Build HTML templates recursively.', function() {
