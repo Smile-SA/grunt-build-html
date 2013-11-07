@@ -35,7 +35,8 @@ module.exports = function(grunt) {
           templates: ['test/fragments/**/*.html'],
         },
         files: {
-          'tmp/simple-skeleton.html': ['test/fixtures/simple-skeleton.html'],
+	      'tmp/simple-skeleton.html': ['test/fixtures/simple-skeleton.html'],
+	      'tmp/simple-skeleton-with-submodule.html': ['test/fixtures/simple-skeleton-with-submodule.html'],
           'tmp/simple-grid.html': ['test/fixtures/simple-grid.html'],
           'tmp/nothing-to-do.html': ['test/fixtures/nothing-to-do.html']
         }
