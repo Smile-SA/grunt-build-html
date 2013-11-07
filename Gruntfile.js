@@ -39,6 +39,7 @@ module.exports = function(grunt) {
 	      'tmp/simple-skeleton-with-submodule.html': ['test/fixtures/simple-skeleton-with-submodule.html'],
           'tmp/simple-grid.html': ['test/fixtures/simple-grid.html'],
           'tmp/advanced-grid.html': ['test/fixtures/advanced-grid.html'],
+          'tmp/include-content-hello-world.html': ['test/fixtures/include-content-hello-world.html'],
           'tmp/nothing-to-do.html': ['test/fixtures/nothing-to-do.html']
         }
       }

@@ -45,6 +45,12 @@ exports.build_html = {
     test.equal(actual, expected, 'a simple skeleton is loaded with 2 params set, one of them is a submodule.');
     test.done();
   },
+  includeContentHelloWorld: function(test) {
+	    var actual = grunt.file.read('tmp/include-content-hello-world.html');
+	    var expected = grunt.file.read('test/expected/simple-hello-world.html');
+	    test.equal(actual, expected, 'a simple skeleton is loaded with 2 params set, one of them is a submodule, this submodule simply loads a module.');
+	    test.done();
+	  },
   simpleGridSystem: function(test) {
     var actual = grunt.file.read('tmp/simple-grid.html');
     var expected = grunt.file.read('test/expected/simple-grid.html');
