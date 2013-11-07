@@ -27,22 +27,22 @@ exports.build_html = {
     // setup here if necessary
     done();
   },
-  default_options: function(test) {
-    test.expect(1);
-
-    var actual = grunt.file.read('tmp/default_options');
-    var expected = grunt.file.read('test/expected/default_options');
-    test.equal(actual, expected, 'should describe what the default behavior is.');
-
+  nothingToDo: function(test) {
+    var actual = grunt.file.read('tmp/nothing-to-do.html');
+    var expected = grunt.file.read('test/expected/simple-hello-world.html');
+    test.equal(actual, expected, 'nothing has been altered.');
     test.done();
   },
-  custom_options: function(test) {
-    test.expect(1);
-
-    var actual = grunt.file.read('tmp/custom_options');
-    var expected = grunt.file.read('test/expected/custom_options');
-    test.equal(actual, expected, 'should describe what the custom option(s) behavior is.');
-
+  simpleSkeleton: function(test) {
+    var actual = grunt.file.read('tmp/simple-skeleton.html');
+    var expected = grunt.file.read('test/expected/simple-hello-world.html');
+    test.equal(actual, expected, 'a simple skeleton is loaded with 2 params set.');
     test.done();
   },
+  simpleGridSystem: function(test) {
+    var actual = grunt.file.read('tmp/simple-grid.html');
+    var expected = grunt.file.read('test/expected/simple-grid.html');
+    test.equal(actual, expected, 'a simple grid system.');
+    test.done();
+  }
 };
