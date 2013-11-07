@@ -38,6 +38,7 @@ module.exports = function(grunt) {
 	      'tmp/simple-skeleton.html': ['test/fixtures/simple-skeleton.html'],
 	      'tmp/simple-skeleton-with-submodule.html': ['test/fixtures/simple-skeleton-with-submodule.html'],
           'tmp/simple-grid.html': ['test/fixtures/simple-grid.html'],
+          'tmp/advanced-grid.html': ['test/fixtures/advanced-grid.html'],
           'tmp/nothing-to-do.html': ['test/fixtures/nothing-to-do.html']
         }
       }
