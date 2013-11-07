@@ -11,6 +11,7 @@
 module.exports = function(grunt) {
   var path      = require('path');
   var _         = grunt.util._;
+  var debug     = grunt.log.debug;
   var backtrace = function(files) {
     var message = '[backtrace] : ';
     for (var i in files) {
@@ -57,6 +58,8 @@ module.exports = function(grunt) {
     // Process templates.
     _.each(grunt.file.expand(options.templates), function(tpl) {
       var tplName = path.basename(tpl, path.extname(tpl)).replace(/[\s]/g, '_');
+      debug("loading template :", tplName);
+      debug("  path is :", tpl);
       templates[tplName] = {
         content: grunt.file.read(tpl),
         filepath: tpl
