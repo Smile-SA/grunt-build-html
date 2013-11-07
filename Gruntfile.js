@@ -30,22 +30,15 @@ module.exports = function(grunt) {
 
     // Configuration to be run (and then tested).
     build_html: {
-      default_options: {
+      test: {
         options: {
+          templates: ['test/fragments/**/*.html'],
         },
-        files: {
-          'tmp/default_options': ['test/fixtures/testing', 'test/fixtures/123'],
-        },
-      },
-      custom_options: {
-        options: {
-          separator: ': ',
-          punctuation: ' !!!',
-        },
-        files: {
-          'tmp/custom_options': ['test/fixtures/testing', 'test/fixtures/123'],
-        },
-      },
+        expand: true,
+        cwd: 'test/fixtures/',
+        src: ['**/*.html'],
+        dest: 'tmp/'
+      }
     },
 
     // Unit tests.
@@ -65,7 +58,7 @@ module.exports = function(grunt) {
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'build_html', 'nodeunit']);
+  grunt.registerTask('test', ['clean', 'build_html:test', 'nodeunit']);
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);

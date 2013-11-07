@@ -1,0 +1,13 @@
+<%= include('simple-skeleton', {
+  title: 'My title',
+  body: include('simple-grid', {
+    block1: include('simple-grid', {
+      block1: 'My content 1',
+      block2: 'My content 2',
+    }),
+    block2: include('simple-grid', {
+      block1: 'My content 3',
+      block2: 'My content 4',
+    })
+  })
+}) %>
