@@ -46,11 +46,23 @@ exports.build_html = {
     test.done();
   },
   includeContentHelloWorld: function(test) {
-	    var actual = grunt.file.read('tmp/include-content-hello-world.html');
-	    var expected = grunt.file.read('test/expected/simple-hello-world.html');
-	    test.equal(actual, expected, 'a simple skeleton is loaded with 2 params set, one of them is a submodule, this submodule simply loads a module.');
-	    test.done();
-	  },
+    var actual = grunt.file.read('tmp/include-content-hello-world.html');
+    var expected = grunt.file.read('test/expected/simple-hello-world.html');
+    test.equal(actual, expected, 'a simple skeleton is loaded with 2 params set, one of them is a submodule, this submodule simply loads a module.');
+    test.done();
+  },
+  missingParamDefault: function(test) {
+    var actual = grunt.file.read('tmp/missing-params-default.html');
+    var expected = grunt.file.read('test/expected/missing-params-default.html');
+    test.equal(actual, expected, 'load a module without overriding a default parameter.');
+    test.done();
+  },
+  missingParamCustom: function(test) {
+    var actual = grunt.file.read('tmp/missing-params-custom.html');
+    var expected = grunt.file.read('test/expected/missing-params-custom.html');
+    test.equal(actual, expected, 'load a module overriding a default parameter.');
+    test.done();
+  },
   simpleGridSystem: function(test) {
     var actual = grunt.file.read('tmp/simple-grid.html');
     var expected = grunt.file.read('test/expected/simple-grid.html');

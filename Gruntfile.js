@@ -35,12 +35,14 @@ module.exports = function(grunt) {
           templates: ['test/fragments/**/*.html'],
         },
         files: {
-	      'tmp/simple-skeleton.html': ['test/fixtures/simple-skeleton.html'],
-	      'tmp/simple-skeleton-with-submodule.html': ['test/fixtures/simple-skeleton-with-submodule.html'],
-          'tmp/simple-grid.html': ['test/fixtures/simple-grid.html'],
-          'tmp/advanced-grid.html': ['test/fixtures/advanced-grid.html'],
-          'tmp/include-content-hello-world.html': ['test/fixtures/include-content-hello-world.html'],
-          'tmp/nothing-to-do.html': ['test/fixtures/nothing-to-do.html']
+	      'tmp/simple-skeleton.html': 'test/fixtures/simple-skeleton.html',
+	      'tmp/simple-skeleton-with-submodule.html': 'test/fixtures/simple-skeleton-with-submodule.html',
+          'tmp/simple-grid.html': 'test/fixtures/simple-grid.html',
+          'tmp/advanced-grid.html': 'test/fixtures/advanced-grid.html',
+          'tmp/include-content-hello-world.html': 'test/fixtures/include-content-hello-world.html',
+          'tmp/missing-params-custom.html': 'test/fixtures/missing-params-custom.html',
+          'tmp/missing-params-default.html': 'test/fixtures/missing-params-default.html',
+          'tmp/nothing-to-do.html': 'test/fixtures/nothing-to-do.html'
         }
       }
     },
