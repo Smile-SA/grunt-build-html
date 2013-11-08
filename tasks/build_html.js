@@ -98,7 +98,7 @@ module.exports = function(grunt) {
         }
       }).map(function(filepath) {
         var html = '';
-        var templateData = {files: [filepath]};
+        var templateData = _.extend(globalData, {files: [filepath]});
         templateData.include = include.bind(templateData);
         options.filename = filepath;
         try {
