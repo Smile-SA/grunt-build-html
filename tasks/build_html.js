@@ -23,6 +23,7 @@ module.exports = function(grunt) {
   grunt.registerMultiTask('build_html', 'Build HTML templates recursively.', function() {
     var include          = null;
     var templates        = {};
+    var globalData       = {};
     var templateSettings = {};
 
     // Merge task-specific and/or target-specific options with these defaults.
@@ -30,7 +31,7 @@ module.exports = function(grunt) {
       templates: []
     });
 
-    // Manage template settings
+    // Manage template settings.
     if (options.interpolate !== undefined) {
       templateSettings.interpolate = options.interpolate;
     }
@@ -41,12 +42,18 @@ module.exports = function(grunt) {
       templateSettings.evaluate = options.evaluate;
     }
 
+    // Read JSON data.
+    if (options.data !== undefined) {
+      globalData = grunt.file.readJSON(options.data);
+    }
+
     // Include method to be used in HTML files.
     include = function(tplName, data) {
       var files, templateData, html = '';
       if (typeof data == 'undefined') {
         data = {};
       }
+      data = _.extend(globalData, data);
 
       if (_.has(templates, tplName)) {
         files = _.clone(this.files);
@@ -112,4 +119,3 @@ module.exports = function(grunt) {
   });
 
 };
-
