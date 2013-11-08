@@ -40,7 +40,6 @@ module.exports = function(grunt) {
     if (options.evaluate !== undefined) {
       templateSettings.evaluate = options.evaluate;
     }
-    _.templateSettings = templateSettings;
 
     // Include method to be used in HTML files.
     include = function(tplName, data) {
@@ -55,7 +54,7 @@ module.exports = function(grunt) {
         templateData = {files: files};
         data.include = include.bind(templateData);
         try {
-          html = _.template(templates[tplName].content, data);
+          html = _.template(templates[tplName].content, data, templateSettings);
         } catch (error) {
           grunt.log.error(error.message);
           backtrace(files);
@@ -96,7 +95,7 @@ module.exports = function(grunt) {
         templateData.include = include.bind(templateData);
         options.filename = filepath;
         try {
-          html = _.template(grunt.file.read(filepath), templateData);
+          html = _.template(grunt.file.read(filepath), templateData, templateSettings);
         } catch (error) {
           grunt.log.error(error.message);
           backtrace(templateData.files);
@@ -113,3 +112,4 @@ module.exports = function(grunt) {
   });
 
 };
+
