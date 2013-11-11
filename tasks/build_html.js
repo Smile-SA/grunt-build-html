@@ -53,7 +53,7 @@ module.exports = function(grunt) {
       if (typeof data == 'undefined') {
         data = {};
       }
-      data = _.extend(globalData, data);
+      data = _.extend({}, globalData, data);
 
       if (_.has(templates, tplName)) {
         files = _.clone(this.files);
