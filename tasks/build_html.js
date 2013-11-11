@@ -28,7 +28,8 @@ module.exports = function(grunt) {
 
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
-      templates: []
+      templates: [],
+      templateNamespaceRoot: undefined
     });
 
     // Manage template settings.
@@ -76,10 +77,17 @@ module.exports = function(grunt) {
 
     // Process templates.
     _.each(grunt.file.expand(options.templates), function(tpl) {
-      var tplName = path.basename(tpl, path.extname(tpl)).replace(/[\s]/g, '_');
-      debug("loading template :", tplName);
-      debug("  path is :", tpl);
-      templates[tplName] = {
+      var tplKey = "";
+      if (options.templateNamespaceRoot) {
+        tplKey = path.relative(options.templateNamespaceRoot, path.dirname(tpl));
+        if ('tplKey', tplKey !== '') {;
+		  tplKey += '/';
+		}
+      }
+      tplKey += path.basename(tpl, path.extname(tpl)).replace(/[\s]/g, '_');
+      debug('loading template :', tplKey);
+      debug('  path is :', tpl);
+      templates[tplKey] = {
         content: grunt.file.read(tpl),
         filepath: tpl
       };

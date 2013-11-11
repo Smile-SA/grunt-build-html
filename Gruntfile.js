@@ -33,6 +33,7 @@ module.exports = function(grunt) {
       test: {
         options: {
           templates: ['test/fragments/**/*.html'],
+          templateNamespaceRoot: 'test/fragments'
         },
         expand: true,
         cwd: 'test/fixtures/',
