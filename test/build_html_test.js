@@ -69,6 +69,12 @@ exports.build_html = {
     test.equal(actual, expected, 'load a module overriding a default parameter.');
     test.done();
   },
+  templatesWithWhitespaceInTheirName: function(test) {
+    var actual = grunt.file.read('tmp/include-content-hello-world-with-whitespace.html');
+    var expected = grunt.file.read('test/expected/simple-hello-world.html');
+    test.equal(actual, expected, 'folder tree structure is not altered.');
+    test.done();
+  },
   processSubfolder: function(test) {
     var actual = grunt.file.read('tmp/subfolder/nothing-to-do.html');
     var expected = grunt.file.read('test/expected/subfolder/nothing-to-do.html');
