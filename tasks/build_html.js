@@ -84,7 +84,7 @@ module.exports = function(grunt) {
 		  tplKey += '/';
 		}
       }
-      tplKey += path.basename(tpl, path.extname(tpl)).replace(/[\s]/g, '_');
+      tplKey += path.basename(tpl, path.extname(tpl));
       debug('loading template :', tplKey);
       debug('  path is :', tpl);
       templates[tplKey] = {
