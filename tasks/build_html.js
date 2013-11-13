@@ -10,7 +10,7 @@
 
 module.exports = function(grunt) {
   var path      = require('path');
-  var _         = grunt.util._;
+  var _         = require('lodash');
   var debug     = grunt.log.debug;
   var backtrace = function(files) {
     var message = '[backtrace] : ';
