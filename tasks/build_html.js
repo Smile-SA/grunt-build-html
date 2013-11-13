@@ -51,9 +51,6 @@ module.exports = function(grunt) {
     // Include method to be used in HTML files.
     include = function(tplName, data) {
       var files, templateData, html = '';
-      if (typeof data == 'undefined') {
-        data = {};
-      }
       data = _.extend({}, globalData, data);
 
       if (_.has(templates, tplName)) {
