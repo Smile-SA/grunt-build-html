@@ -24,24 +24,13 @@ module.exports = function(grunt) {
     var include          = null;
     var templates        = {};
     var globalData       = {};
-    var templateSettings = {};
 
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
-      templates: [],
+      templates:             [],
+      templateSettings:      {},
       templateNamespaceRoot: undefined
     });
-
-    // Manage template settings.
-    if (options.interpolate !== undefined) {
-      templateSettings.interpolate = options.interpolate;
-    }
-    if (options.escape !== undefined) {
-      templateSettings.escape = options.escape;
-    }
-    if (options.evaluate !== undefined) {
-      templateSettings.evaluate = options.evaluate;
-    }
 
     // Read JSON data.
     if (options.data !== undefined) {
@@ -59,7 +48,7 @@ module.exports = function(grunt) {
         templateData = {files: files};
         data.include = include.bind(templateData);
         try {
-          html = _.template(templates[tplName].content, data, templateSettings);
+          html = _.template(templates[tplName].content, data, options.templateSettings);
         } catch (error) {
           grunt.log.error(error.message);
           backtrace(files);
@@ -107,7 +96,7 @@ module.exports = function(grunt) {
         templateData.include = include.bind(templateData);
         options.filename = filepath;
         try {
-          html = _.template(grunt.file.read(filepath), templateData, templateSettings);
+          html = _.template(grunt.file.read(filepath), templateData, options.templateSettings);
         } catch (error) {
           grunt.log.error(error.message);
           backtrace(templateData.files);
