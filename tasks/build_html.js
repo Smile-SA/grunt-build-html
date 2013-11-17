@@ -21,26 +21,28 @@ module.exports = function(grunt) {
   };
 
   grunt.registerMultiTask('build_html', 'Build HTML templates recursively.', function() {
-    var include          = null;
-    var templates        = {};
-    var globalData       = {};
+    var include, datapath, templates = {};
 
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
+      data:                  {},
       templates:             [],
       templateSettings:      {},
       templateNamespaceRoot: undefined
     });
 
     // Read JSON data.
-    if (options.data !== undefined) {
-      globalData = grunt.file.readJSON(options.data);
+    if (_.isString(options.data)) {
+      datapath = grunt.template.process(options.data);
+      if (grunt.file.exists(datapath)) {
+        options.data = grunt.file.readJSON(datapath);
+      }
     }
 
     // Include method to be used in HTML files.
     include = function(tplName, data) {
       var files, templateData, html = '';
-      data = _.extend({}, globalData, data);
+      data = _.extend({}, options.data, data);
 
       if (_.has(templates, tplName)) {
         files = _.clone(this.files);
@@ -92,7 +94,7 @@ module.exports = function(grunt) {
         }
       }).map(function(filepath) {
         var html = '';
-        var templateData = _.extend(globalData, {files: [filepath]});
+        var templateData = _.extend({}, options.data, {files: [filepath]});
         templateData.include = include.bind(templateData);
         options.filename = filepath;
         try {
