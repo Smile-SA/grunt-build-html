@@ -31,37 +31,181 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+        <h1>
+<a name="grunt-build-html" class="anchor" href="#grunt-build-html"><span class="octicon octicon-link"></span></a>grunt-build-html</h1>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<blockquote>
+<p>Build HTML templates recursively.</p>
+</blockquote>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
+<h2>
+<a name="getting-started" class="anchor" href="#getting-started"><span class="octicon octicon-link"></span></a>Getting Started</h2>
+
+<p>This plugin requires Grunt <code>~0.4.1</code></p>
+
+<p>If you haven't used <a href="http://gruntjs.com/">Grunt</a> before, be sure to check out the <a href="http://gruntjs.com/getting-started">Getting Started</a> guide, as it explains how to create a <a href="http://gruntjs.com/sample-gruntfile">Gruntfile</a> as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:</p>
+
+<pre lang="shell"><code>npm install grunt-build-html --save-dev
 </code></pre>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<p>Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:</p>
+
+<div class="highlight highlight-js"><pre><span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s1">'grunt-build-html'</span><span class="p">);</span>
+</pre></div>
+
+<h2>
+<a name="the-build_html-task" class="anchor" href="#the-build_html-task"><span class="octicon octicon-link"></span></a>The "build_html" task</h2>
 
 <h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+<a name="overview" class="anchor" href="#overview"><span class="octicon octicon-link"></span></a>Overview</h3>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<p>In your project's Gruntfile, add a section named <code>build_html</code> to the data object passed into <code>grunt.initConfig()</code>.</p>
+
+<div class="highlight highlight-js"><pre><span class="nx">grunt</span><span class="p">.</span><span class="nx">initConfig</span><span class="p">({</span>
+  <span class="nx">build_html</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+      <span class="c1">// Task-specific options go here.</span>
+    <span class="p">},</span>
+    <span class="nx">your_target</span><span class="o">:</span> <span class="p">{</span>
+      <span class="c1">// Target-specific file lists and/or options go here.</span>
+    <span class="p">},</span>
+  <span class="p">},</span>
+<span class="p">})</span>
+</pre></div>
 
 <h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+<a name="options" class="anchor" href="#options"><span class="octicon octicon-link"></span></a>Options</h3>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<h4>
+<a name="optiondata" class="anchor" href="#optiondata"><span class="octicon octicon-link"></span></a>option.data</h4>
+
+<p>Type: <code>String|Object</code>
+Default: <code>{}</code></p>
+
+<p>An object containing data that will be available in all templates (files and partials).
+You may also pass a JSON filepath as a string.</p>
+
+<div class="highlight highlight-js"><pre><span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+  <span class="nx">data</span><span class="o">:</span> <span class="s1">'data.json'</span>
+<span class="p">}</span>
+</pre></div>
+
+<h4>
+<a name="optionstemplates" class="anchor" href="#optionstemplates"><span class="octicon octicon-link"></span></a>options.templates</h4>
+
+<p>Type: <code>String|Array</code>
+Default: <code>[]</code></p>
+
+<p>Lets you specify which files you want to be available as partials you can include in files or in other partials (avoid infinite loops). 
+Globbing supported.</p>
+
+<div class="highlight highlight-js"><pre><span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+   <span class="nx">templates</span><span class="o">:</span> <span class="s1">'dev/fragments/**/*.html'</span>
+<span class="p">}</span>
+</pre></div>
+
+<h4>
+<a name="templatesettings" class="anchor" href="#templatesettings"><span class="octicon octicon-link"></span></a>templateSettings</h4>
+
+<p>Type: <code>Object</code>
+Default: <code>null</code></p>
+
+<p>The settings passed to underscore when compiling templates.</p>
+
+<div class="highlight highlight-js"><pre><span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+  <span class="nx">templateSettings</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">interpolate</span> <span class="o">:</span> <span class="sr">/\{\{(.+?)\}\}/g</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<h4>
+<a name="optionstemplatenamespaceroot" class="anchor" href="#optionstemplatenamespaceroot"><span class="octicon octicon-link"></span></a>options.templateNamespaceRoot</h4>
+
+<p>Type: <code>String</code>
+Default: <code>null</code></p>
+
+<p>If empty, templates will simply be loaded with their filename as template key (without extension and regardless of the templates folder structure).
+If you set the templates root folder, it will serve as the key origin :</p>
+
+<ul>
+<li>template : test/fragments/subfolder/my-content.html</li>
+<li>templateNamespaceRoot : test/fragments</li>
+<li>template key : subfolder/my-content</li>
+</ul><h3>
+<a name="usage-examples" class="anchor" href="#usage-examples"><span class="octicon octicon-link"></span></a>Usage Examples</h3>
+
+<div class="highlight highlight-js"><pre><span class="nx">grunt</span><span class="p">.</span><span class="nx">initConfig</span><span class="p">({</span>
+  <span class="nx">build_html</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">dev</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">templates</span><span class="o">:</span> <span class="s1">'dev/fragments/**/*.html'</span>
+      <span class="p">},</span>
+      <span class="nx">expand</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+      <span class="nx">cwd</span><span class="o">:</span> <span class="s1">'dev/'</span><span class="p">,</span>
+      <span class="nx">src</span><span class="o">:</span> <span class="p">[</span><span class="s1">'*.html'</span><span class="p">],</span>
+      <span class="nx">dest</span><span class="o">:</span> <span class="s1">'staging/'</span><span class="p">,</span>
+      <span class="nx">ext</span><span class="o">:</span> <span class="s1">'.html'</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+</pre></div>
+
+<h4>
+<a name="basic-example" class="anchor" href="#basic-example"><span class="octicon octicon-link"></span></a>Basic example</h4>
+
+<p>In all templates (files and partials) you can use the <code>include</code> special method to include a partials :</p>
+
+<pre><code>&lt;%= include('my-content') %&gt;
+</code></pre>
+
+<h4>
+<a name="example-with-parameters" class="anchor" href="#example-with-parameters"><span class="octicon octicon-link"></span></a>Example with parameters</h4>
+
+<p>You can also set extra parameters that will be available in the included template.</p>
+
+<p><code>dev/my-page.html</code> :</p>
+
+<pre><code>&lt;%= include('head', {title: 'My page'}) %&gt;
+</code></pre>
+
+<p><code>dev/fragments/head.html</code> :</p>
+
+<pre><code>&lt;meta charset="utf-8"/&gt;
+&lt;title&gt;&lt;%- title %&gt;&lt;/title&gt;
+</code></pre>
+
+<h4>
+<a name="recursive-example" class="anchor" href="#recursive-example"><span class="octicon octicon-link"></span></a>Recursive example</h4>
+
+<p>In this example we will define a list of templates that will be processed using a list template that will simply iterate over the parameter to include and concatenate all templates.</p>
+
+<p><code>dev/my-page.html</code> :</p>
+
+<pre><code>&lt;%= include('list', {params: ['header', 'my-page-content', 'footer']}) %&gt;
+</code></pre>
+
+<p><code>dev/fragments/list.html</code> :</p>
+
+<pre><code>&lt;%= _.map(params, function(key){return include(key);}).join('\n')  %&gt;
+</code></pre>
 
 <h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+<a name="troubleshooting" class="anchor" href="#troubleshooting"><span class="octicon octicon-link"></span></a>Troubleshooting</h3>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<p>You can launch your task with the <code>--debug</code> option to get more debug informations.</p>
 
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+<h2>
+<a name="contributing" class="anchor" href="#contributing"><span class="octicon octicon-link"></span></a>Contributing</h2>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<p>In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using <a href="http://gruntjs.com/">Grunt</a>.</p>
+
+<h2>
+<a name="release-history" class="anchor" href="#release-history"><span class="octicon octicon-link"></span></a>Release History</h2>
+
+<ul>
+<li>2013-11-19   v0.1.0   Initial release.</li>
+</ul>
       </section>
     </div>
 
