@@ -68,7 +68,7 @@ module.exports = function(grunt) {
       var tplKey = "";
       if (options.templateNamespaceRoot) {
         tplKey = path.relative(options.templateNamespaceRoot, path.dirname(tpl));
-        if ('tplKey', tplKey !== '') {;
+        if (tplKey !== '') {
 		  tplKey += '/';
 		}
       }
@@ -89,9 +89,8 @@ module.exports = function(grunt) {
         if (!grunt.file.exists(filepath)) {
           grunt.log.warn('Source file "' + filepath + '" not found.');
           return false;
-        } else {
-          return true;
         }
+        return true;
       }).map(function(filepath) {
         var html = '';
         var templateData = _.extend({}, options.data, {files: [filepath]});

@@ -1,6 +1,6 @@
 /*
  * grunt-build-html
- * https://github.com/tonai/grunt-build-html
+ * https://github.com/smile-sa/grunt-build-html
  *
  * Copyright (c) 2013 Tony Cabaye
  * Licensed under the MIT license.
@@ -12,6 +12,10 @@ module.exports = function(grunt) {
 
   // Project configuration.
   grunt.initConfig({
+    myConf: {
+      tmp: '.tmp'
+    },
+
     jshint: {
       all: [
         'Gruntfile.js',
@@ -25,7 +29,7 @@ module.exports = function(grunt) {
 
     // Before generating any new files, remove any previously-created files.
     clean: {
-      tests: ['tmp'],
+      tests: ['<%= myConf.tmp %>'],
     },
 
     // Configuration to be run (and then tested).
@@ -38,7 +42,7 @@ module.exports = function(grunt) {
         expand: true,
         cwd: 'test/fixtures/',
         src: ['**/*.html'],
-        dest: 'tmp/'
+        dest: '<%= myConf.tmp %>'
       }
     },
 
@@ -57,7 +61,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
 
-  // Whenever the "test" task is run, first clean the "tmp" dir, then run this
+  // Whenever the "test" task is run, first clean the ".tmp" dir, then run this
   // plugin's task(s), then test the result.
   grunt.registerTask('test', ['clean', 'build_html:test', 'nodeunit']);
 
