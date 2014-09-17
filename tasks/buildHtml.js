@@ -38,17 +38,21 @@ module.exports = function (grunt) {
       },
     });
 
-    // Deal with URL prefix and suffix
-    if (options.remoteUrl) {
-      urlPrefix = options.remoteUrl.prefix;
-      urlSuffix = options.remoteUrl.suffix;
-    }
-
     // Read JSON data.
     if (_.isString(options.data)) {
       datapath = grunt.template.process(options.data);
       if (grunt.file.exists(datapath)) {
         options.data = grunt.file.readJSON(datapath);
+      }
+    }
+
+    // Deal with URL prefix and suffix
+    if (options.remoteUrl) {
+      if (_.isString(options.remoteUrl.prefix)) {
+        urlPrefix = grunt.template.process(options.remoteUrl.prefix);
+      }
+      if (_.isString(options.remoteUrl.suffix)) {
+        urlSuffix = grunt.template.process(options.remoteUrl.suffix);
       }
     }
 
