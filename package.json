@@ -1,7 +1,7 @@
 {
   "name": "grunt-build-html",
   "description": "Build HTML templates recursively.",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "homepage": "https://github.com/smile-sa/grunt-build-html",
   "author": {
     "name": "Tony Cabaye",
