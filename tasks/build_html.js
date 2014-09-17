@@ -65,12 +65,12 @@ module.exports = function(grunt) {
 
     // Process templates.
     _.each(grunt.file.expand(options.templates), function(tpl) {
-      var tplKey = "";
+      var tplKey = '';
       if (options.templateNamespaceRoot) {
         tplKey = path.relative(options.templateNamespaceRoot, path.dirname(tpl));
         if (tplKey !== '') {
-		  tplKey += '/';
-		}
+          tplKey += '/';
+        }
       }
       tplKey += path.basename(tpl, path.extname(tpl));
       debug('loading template :', tplKey);
