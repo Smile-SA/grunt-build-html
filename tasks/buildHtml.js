@@ -77,6 +77,7 @@ module.exports = function (grunt) {
         if (urlSuffix) {
           tplUrl += urlSuffix;
         }
+        var html = '';
         debug('Retrieve remote content from "' + tplUrl + '"');
         if (data && !data.cache) {
           html = retrieveFromUrl(tplUrl);
