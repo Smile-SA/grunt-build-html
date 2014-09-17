@@ -36,7 +36,7 @@ module.exports = function(grunt) {
     },
 
     // Configuration to be run (and then tested).
-    build_html: {
+    buildHtml: {
       test: {
         options: {
           templates: ['test/fragments/**/*.html'],
@@ -61,7 +61,7 @@ module.exports = function(grunt) {
 
   // Whenever the "test" task is run, first clean the ".tmp" dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'build_html:test', 'nodeunit']);
+  grunt.registerTask('test', ['clean', 'buildHtml:test', 'nodeunit']);
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);

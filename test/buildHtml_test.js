@@ -23,7 +23,7 @@ var grunt = require('grunt');
 */
 var tmpFolder = '.tmp';
 
-exports.build_html = {
+exports.buildHtml = {
   setUp: function(done) {
     // setup here if necessary
     done();

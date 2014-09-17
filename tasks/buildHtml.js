@@ -20,7 +20,7 @@ module.exports = function(grunt) {
     debug(grunt.util.normalizelf(message));
   };
 
-  grunt.registerMultiTask('build_html', 'Build HTML templates recursively.', function() {
+  grunt.registerMultiTask('buildHtml', 'Build HTML templates recursively.', function() {
     var include, datapath, templates = {};
 
     // Merge task-specific and/or target-specific options with these defaults.

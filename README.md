@@ -17,14 +17,14 @@ Once the plugin has been installed, it may be enabled inside your Gruntfile with
 grunt.loadNpmTasks('grunt-build-html');
 ```
 
-## The "build_html" task
+## The "buildHtml" task
 
 ### Overview
-In your project's Gruntfile, add a section named `build_html` to the data object passed into `grunt.initConfig()`.
+In your project's Gruntfile, add a section named `buildHtml` to the data object passed into `grunt.initConfig()`.
 
 ```js
 grunt.initConfig({
-  build_html: {
+  buildHtml: {
     options: {
       // Task-specific options go here.
     },
@@ -92,7 +92,7 @@ If you set the templates root folder, it will serve as the key origin :
 
 ```js
 grunt.initConfig({
-  build_html: {
+  buildHtml: {
     dev: {
       options: {
         templates: 'dev/fragments/**/*.html'
