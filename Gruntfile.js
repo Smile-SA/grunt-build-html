@@ -40,7 +40,8 @@ module.exports = function(grunt) {
       test: {
         options: {
           templates: ['test/fragments/**/*.html'],
-          templateNamespaceRoot: 'test/fragments'
+          templateNamespaceRoot: 'test/fragments',
+          remoteCacheFolder: '<%= myConf.tmp %>/remote-cache'
         },
         expand: true,
         cwd: 'test/fixtures/',

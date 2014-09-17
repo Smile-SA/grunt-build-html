@@ -87,5 +87,11 @@ exports.buildHtml = {
     var expected = grunt.file.read('test/expected/simple-grid.html');
     test.equal(actual, expected, 'a simple grid system.');
     test.done();
+  },
+  simpleSkeletonWithRemoteSubmodule: function(test) {
+    var actual = grunt.file.read(tmpFolder + '/simple-skeleton-with-remote-submodule.html');
+    var expected = grunt.file.read('test/expected/simple-skeleton-with-remote-submodule.html');
+    test.equal(actual, expected, 'a simple skeleton is loaded with 2 params set, one of them is a remote submodule.');
+    test.done();
   }
 };

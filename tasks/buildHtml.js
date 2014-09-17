@@ -11,6 +11,7 @@
 module.exports = function(grunt) {
   var path      = require('path');
   var _         = require('lodash');
+  var request   = require('request');
   var debug     = grunt.log.debug;
   var backtrace = function(files) {
     var message = '[backtrace] : ';
@@ -21,14 +22,15 @@ module.exports = function(grunt) {
   };
 
   grunt.registerMultiTask('buildHtml', 'Build HTML templates recursively.', function() {
-    var include, datapath, templates = {};
+    var datapath, templates = {};
 
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
       data:                  {},
       templates:             [],
       templateSettings:      {},
-      templateNamespaceRoot: undefined
+      templateNamespaceRoot: undefined,
+      remoteCacheFolder:     undefined,
     });
 
     // Read JSON data.
@@ -39,8 +41,35 @@ module.exports = function(grunt) {
       }
     }
 
+    var getTemplateCacheKeyFromRemoteUrl = function(remoteUrl){
+    	if (remoteUrl.indexOf('http') !== 0){
+    	  grunt.log.error('something seems wrong with this remote url : ' + remoteUrl);
+    	}
+    	return remoteUrl.replace(/(\/|\?|\:)/g, '@');
+    };
+
+    // Retrieve remote content method to be used in HTML files.
+    var retrieve = function (tplUrl, data) {
+      if (!options.remoteCacheFolder){
+        grunt.log.error('remoteCacheFolder is not set ito plugin option, you have to define it (for example .tmp/remote-cache)');
+      }
+      debug('retrieve | Retrieve content from "' + tplUrl + '"');
+      var remoteFragmentKey = getTemplateCacheKeyFromRemoteUrl(tplUrl);
+      if (!templates[remoteFragmentKey]) {
+    	debug('retrieve | Remote fragment is not into cache, get it from the disk cache');
+    	//   get fragment from disk synchronously (synchronously !)
+    	//   if fragment has not been dumped
+    	//     retrieve remote fragment (synchronously !)
+    	//     dump it into options.remoteCacheFolder
+    	//   put fragment into cache
+      }
+      include(remoteFragmentKey, data);
+      return '';
+    };
+
     // Include method to be used in HTML files.
-    include = function(tplName, data) {
+    var include = function(tplName, data) {
+      debug('include | Include content from "' + tplName + '" with data=' + JSON.stringify(data));
       var files, templateData, html = '';
       data = _.extend({}, options.data, data);
 
@@ -49,6 +78,8 @@ module.exports = function(grunt) {
         files.push(templates[tplName].filepath);
         templateData = {files: files};
         data.include = include.bind(templateData);
+        data.retrieve = retrieve.bind(templateData);
+        debug('include | templateData=' + JSON.stringify(templateData));
         try {
           html = _.template(templates[tplName].content, data, options.templateSettings);
         } catch (error) {
@@ -94,7 +125,9 @@ module.exports = function(grunt) {
       }).map(function(filepath) {
         var html = '';
         var templateData = _.extend({}, options.data, {files: [filepath]});
+        debug('Evaluate page "' + filepath + '" with templateData=' + JSON.stringify(templateData));
         templateData.include = include.bind(templateData);
+        templateData.retrieve = retrieve.bind(templateData);
         options.filename = filepath;
         try {
           html = _.template(grunt.file.read(filepath), templateData, options.templateSettings);
