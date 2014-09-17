@@ -23,6 +23,7 @@ module.exports = function (grunt) {
 
   grunt.registerMultiTask('buildHtml', 'Build HTML templates recursively.', function () {
     var datapath, templates = {};
+    var urlPrefix, urlSuffix;
 
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
@@ -31,7 +32,17 @@ module.exports = function (grunt) {
       templateSettings: {},
       templateNamespaceRoot: undefined,
       remoteCacheFolder: undefined,
+      remoteUrl: {
+        prefix: undefined,
+        suffix: undefined,
+      },
     });
+
+    // Deal with URL prefix and suffix
+    if (options.remoteUrl) {
+      urlPrefix = options.remoteUrl.prefix;
+      urlSuffix = options.remoteUrl.suffix;
+    }
 
     // Read JSON data.
     if (_.isString(options.data)) {
@@ -100,10 +111,22 @@ module.exports = function (grunt) {
      * @returns {*} Response data
      */
     var retrieveFromUrl = function (tplUrl) {
-      var req = httpsync.get({ url: tplUrl });
-      var res = req.end();
-      debug('result=' + res.data);
-      return res.data;
+      if (urlPrefix) {
+        tplUrl = urlPrefix + tplUrl;
+      }
+      if (urlSuffix) {
+        tplUrl += urlSuffix;
+      }
+      debug('Retrieve remote content from "' + tplUrl + '"');
+      var request = httpsync.get({ url: tplUrl });
+      var response = request.end();
+      if (response.statusCode !== 200) {
+        var error = {
+          'message': 'An error has occured when trying to retrieve content from url "' + tplUrl + '"'
+        };
+        throw error;
+      }
+      return response.data;
     };
 
     // Process templates.
