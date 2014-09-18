@@ -87,6 +87,22 @@ If you set the templates root folder, it will serve as the key origin :
 * template : test/fragments/subfolder/my-content.html
 * templateNamespaceRoot : test/fragments
 * template key : subfolder/my-content
+                                      
+#### options.remoteUrl
+Type: `Object`
+Default: `empty`
+
+If empty, each URL will be called without transformation.
+If you set prefix and/or suffix, they will be appended to all URL.
+
+```js
+options: {
+  remoteUrl: {     
+    prefix: 'http://www.domain.com',
+    suffix: '.html'
+  }
+}
+```
 
 ### Usage Examples
 
