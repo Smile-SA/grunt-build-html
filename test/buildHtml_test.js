@@ -90,7 +90,7 @@ exports.buildHtml = {
   },
   simpleSkeletonWithRemoteSubmodule: function(test) {
     var actual = grunt.file.read(tmpFolder + '/simple-skeleton-with-remote-submodule.html');
-    var expected = grunt.file.read('test/expected/simple-skeleton-with-remote-submodule.html');
+    var expected = grunt.file.read('test/expected/simple-hello-world.html');
     test.equal(actual, expected, 'a simple skeleton is loaded with 2 params set, one of them is a remote submodule.');
     test.done();
   }
