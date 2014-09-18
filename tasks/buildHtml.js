@@ -1,8 +1,7 @@
 /*
  * grunt-build-html
- * https://github.com/tonai/grunt-build-html
+ * https://github.com/Smile-SA/grunt-build-html
  *
- * Copyright (c) 2013 Tony Cabaye
  * Licensed under the MIT license.
  */
 
@@ -17,8 +16,7 @@ module.exports = function (grunt) {
   var debug = grunt.log.debug;
 
   var backtrace = function (files) {
-    var message = '[backtrace] : ';
-    var i;
+    var i, message = '[backtrace] : ';
     for (i in files) {
       message += grunt.util.linefeed + files[i];
     }
@@ -27,20 +25,21 @@ module.exports = function (grunt) {
 
   grunt.registerMultiTask('buildHtml', 'Build HTML templates recursively.', function () {
     var datapath, urlPrefix, urlSuffix;
-    var templates = {}
+    var templates = {};
     var cache = {};
 
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
-      data : {},
-      templates : [],
-      templateSettings : {},
-      templateNamespaceRoot : undefined,
-      remoteCacheFolder : '.tmp/remote-cache',
-      remoteUrl : {},
+      data: {},
+      templates: [],
+      templateSettings: {},
+      templateNamespaceRoot: undefined,
+      // For remote content retrieving
+      remoteCacheFolder: '.tmp/remote-cache',
+      remoteUrl: {}
     });
 
-    // Read JSON data and add it with options
+    // Read JSON data and add it to options
     if (_.isString(options.data)) {
       datapath = grunt.template.process(options.data);
       if (grunt.file.exists(datapath)) {
@@ -48,7 +47,7 @@ module.exports = function (grunt) {
       }
     }
 
-    // Deal with URL prefix and suffix
+    // Deal with URL prefix and suffix as globals
     if (options.remoteUrl) {
       if (_.isString(options.remoteUrl.prefix)) {
         urlPrefix = grunt.template.process(options.remoteUrl.prefix);
@@ -58,20 +57,28 @@ module.exports = function (grunt) {
       }
     }
 
+    /**
+     * Transform URL to cache key in order to dump its content
+     * @param remoteUrl Remote content URL
+     * @returns {string|*} URL as cache key
+     */
     var getTemplateCacheKeyFromRemoteUrl = function (remoteUrl) {
       if (remoteUrl.indexOf('http') !== 0) {
-        grunt.log.error('something seems wrong with this remote url : ' + remoteUrl);
+        grunt.log.error('Something seems wrong with this remote url: ' + remoteUrl);
       }
-      return remoteUrl.replace(/(\/|\?|\:)/g, '@');
+      return remoteUrl.toLowerCase().replace(/(\/|\?|\:)/g, '@');
     };
 
+    /**
+     * Retrieve content by key from cache
+     */
     var getTemplateFromCache = _.memoize(function (key) {
       return cache[key];
     }, _.identity);
 
     /**
      * Retrieve remote content method to be used in HTML files.
-     * 
+     *
      * @param tplUrl
      *            Remote content URL
      * @param data
@@ -86,34 +93,39 @@ module.exports = function (grunt) {
         tplUrl += urlSuffix;
       }
       var html = '';
-      debug('Retrieve remote content from "' + tplUrl + '"');
+      debug('  retrieve remote content');
       var remoteFragmentKey = getTemplateCacheKeyFromRemoteUrl(tplUrl);
       if (data && !data.cache) {
         html = retrieveFromUrl(tplUrl, remoteFragmentKey, true);
       } else {
         if (!_.has(cache, remoteFragmentKey)) {
           cache[remoteFragmentKey] = retrieveFromUrl(tplUrl, remoteFragmentKey, false);
-          debug('Save ' + remoteFragmentKey + ' result in cache');
+          debug('  stash content in memory');
+        } else {
+          debug('  get content from memory');
         }
         html = getTemplateFromCache(remoteFragmentKey);
       }
       return html;
     };
 
-    // Include method to be used in HTML files.
+    /**
+     * Include method to be used in HTML files.
+     * @param tplName Relative template path
+     * @param data The data object used to populate the text.
+     * @returns {string} Compiled template content
+     */
     var include = function (tplName, data) {
-      debug('Include content from "' + tplName + '"');
       var files, templateData, html = '';
       data = _.extend({}, options.data, data);
-
       if (_.has(templates, tplName)) {
+        debug('  include ' + templates[tplName].filepath);
         files = _.clone(this.files);
         files.push(templates[tplName].filepath);
         templateData = {
-          files : files
+          files: files
         };
         data.include = include.bind(templateData);
-        data.retrieve = retrieve.bind(templateData);
         try {
           html = _.template(templates[tplName].content, data, options.templateSettings);
         } catch (error) {
@@ -124,10 +136,16 @@ module.exports = function (grunt) {
         grunt.log.writeln('Template "' + tplName + '" does not exists.');
         backtrace(this.files);
       }
-
       return html;
     };
 
+    /**
+     * Process synchronous request
+     * @param tplUrl Remote content URL to retrieve
+     * @param fragmentKey Remote content cache key
+     * @param skipCache If true, request is processed without cache
+     * @returns {*} Remote content data
+     */
     var retrieveFromUrl = function (tplUrl, fragmentKey, skipCache) {
       // get fragment synchronously ='(
       return sync.await(retrieveRemote(tplUrl, fragmentKey, options.remoteCacheFolder, skipCache, sync.defer()));
@@ -143,14 +161,14 @@ module.exports = function (grunt) {
         }
       }
       tplKey += path.basename(tpl, path.extname(tpl));
-      debug('loading template :', tplKey);
+      debug('Loading template:', tplKey);
       debug('  path is :', tpl);
       templates[tplKey] = {
-        content : grunt.file.read(tpl),
-        filepath : tpl
+        content: grunt.file.read(tpl),
+        filepath: tpl
       };
     });
-
+    grunt.log.ok(_.size(templates) + ' HTML file' + (_.size(templates) > 0 ? 's' : '') + ' found to build');
     var processData = function () {
       // Iterate over all specified file groups.
       files.forEach(function (file) {
@@ -166,13 +184,13 @@ module.exports = function (grunt) {
         }).map(function (filepath) {
           var html = '';
           var templateData = _.extend({}, options.data, {
-            files : [ filepath ]
+            files: [ filepath ]
           });
-          debug('Evaluate page "' + filepath + '" with templateData=' + JSON.stringify(templateData));
+          debug('Evaluate page ' + filepath);
           templateData.include = include.bind(templateData);
-          options.templateSettings.imports = {
-            'retrieve' : retrieve
-          };
+          options.templateSettings.imports = _.extend({}, options.templateSettings.imports, {
+            'retrieve': retrieve
+          });
           options.filename = filepath;
           try {
             html = _.template(grunt.file.read(filepath), templateData, options.templateSettings);
@@ -191,9 +209,11 @@ module.exports = function (grunt) {
       });
     };
 
+    // Sync in FS
     mkdirp.sync(options.remoteCacheFolder);
     var files = this.files;
     var task = this;
+    // Work with asynchronous HTTP requests
     sync.fiber(function () {
       var done = task.async();
       processData(files);
