@@ -168,7 +168,7 @@ module.exports = function (grunt) {
         filepath: tpl
       };
     });
-    grunt.log.ok(_.size(templates) + ' HTML file' + (_.size(templates) > 0 ? 's' : '') + ' found to build');
+    grunt.log.ok(_.size(this.files) + ' HTML file' + (_.size(this.files) > 0 ? 's' : '') + ' found to build');
     var processData = function () {
       // Iterate over all specified file groups.
       files.forEach(function (file) {
