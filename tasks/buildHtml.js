@@ -11,12 +11,15 @@
 module.exports = function (grunt) {
   var path = require('path');
   var _ = require('lodash');
-  var httpsync = require('httpsync');
+  var sync = require('synchronize');
+  var mkdirp = require('mkdirp');
+  var retrieveRemote = require('./buildHtml-retrieve-remote')(grunt);
   var debug = grunt.log.debug;
 
   var backtrace = function (files) {
     var message = '[backtrace] : ';
-    for (var i in files) {
+    var i;
+    for (i in files) {
       message += grunt.util.linefeed + files[i];
     }
     debug(grunt.util.normalizelf(message));
@@ -29,12 +32,12 @@ module.exports = function (grunt) {
 
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
-      data: {},
-      templates: [],
-      templateSettings: {},
-      templateNamespaceRoot: undefined,
-      remoteCacheFolder: '.tmp/remote-cache',
-      remoteUrl: {},
+      data : {},
+      templates : [],
+      templateSettings : {},
+      templateNamespaceRoot : undefined,
+      remoteCacheFolder : '.tmp/remote-cache',
+      remoteUrl : {},
     });
 
     // Read JSON data and add it with options
@@ -68,8 +71,11 @@ module.exports = function (grunt) {
 
     /**
      * Retrieve remote content method to be used in HTML files.
-     * @param tplUrl Remote content URL
-     * @param data Options
+     * 
+     * @param tplUrl
+     *            Remote content URL
+     * @param data
+     *            Options
      * @returns {*} Remote content data
      */
     var retrieve = function (tplUrl, data) {
@@ -81,13 +87,12 @@ module.exports = function (grunt) {
       }
       var html = '';
       debug('Retrieve remote content from "' + tplUrl + '"');
+      var remoteFragmentKey = getTemplateCacheKeyFromRemoteUrl(tplUrl);
       if (data && !data.cache) {
-        html = retrieveFromUrl(tplUrl);
+        html = retrieveFromUrl(tplUrl, remoteFragmentKey, true);
       } else {
-        var remoteFragmentKey = getTemplateCacheKeyFromRemoteUrl(tplUrl);
         if (!_.has(cache, remoteFragmentKey)) {
-          // TODO retrieve from FS
-          cache[remoteFragmentKey] = retrieveFromUrl(tplUrl);
+          cache[remoteFragmentKey] = retrieveFromUrl(tplUrl, remoteFragmentKey, false);
           debug('Save ' + remoteFragmentKey + ' result in cache');
         }
         html = getTemplateFromCache(remoteFragmentKey);
@@ -104,14 +109,16 @@ module.exports = function (grunt) {
       if (_.has(templates, tplName)) {
         files = _.clone(this.files);
         files.push(templates[tplName].filepath);
-        templateData = {files: files};
+        templateData = {
+          files : files
+        };
         data.include = include.bind(templateData);
         data.retrieve = retrieve.bind(templateData);
         try {
-        html = _.template(templates[tplName].content, data, options.templateSettings);
+          html = _.template(templates[tplName].content, data, options.templateSettings);
         } catch (error) {
-        grunt.log.error(error.message);
-        backtrace(files);
+          grunt.log.error(error.message);
+          backtrace(files);
         }
       } else {
         grunt.log.writeln('Template "' + tplName + '" does not exists.');
@@ -121,19 +128,9 @@ module.exports = function (grunt) {
       return html;
     };
 
-    /**
-     * Retrieve remote content from an URL
-     * @param tplUrl Template URL
-     * @returns {*} Response data
-     */
-    var retrieveFromUrl = function (tplUrl) {
-      debug('GET ' + tplUrl);
-      var request = httpsync.get({ url: tplUrl });
-      var response = request.end();
-      if (response.statusCode !== 200) {
-        throw new Error('An error has occured when trying to retrieve content from url "' + tplUrl + '" (code=' + response.statusCode + ')');
-      }
-      return response.data;
+    var retrieveFromUrl = function (tplUrl, fragmentKey, skipCache) {
+      // get fragment synchronously ='(
+      return sync.await(retrieveRemote(tplUrl, fragmentKey, options.remoteCacheFolder, skipCache, sync.defer()));
     };
 
     // Process templates.
@@ -142,50 +139,65 @@ module.exports = function (grunt) {
       if (options.templateNamespaceRoot) {
         tplKey = path.relative(options.templateNamespaceRoot, path.dirname(tpl));
         if (tplKey !== '') {
-        tplKey += '/';
+          tplKey += '/';
         }
       }
       tplKey += path.basename(tpl, path.extname(tpl));
       debug('loading template :', tplKey);
       debug('  path is :', tpl);
       templates[tplKey] = {
-        content: grunt.file.read(tpl),
-        filepath: tpl
+        content : grunt.file.read(tpl),
+        filepath : tpl
       };
     });
 
-    // Iterate over all specified file groups.
-    this.files.forEach(function (file) {
-      // Concat specified files.
-      var src = file.src.filter(function (filepath) {
-        // Warn on and remove invalid source files (if nonull was set).
-        if (!grunt.file.exists(filepath)) {
-        grunt.log.warn('Source file "' + filepath + '" not found.');
-        return false;
-        }
-        return true;
-      }).map(function (filepath) {
-        var html = '';
-        var templateData = _.extend({}, options.data, {files: [filepath]});
-        debug('Evaluate page "' + filepath + '" with templateData=' + JSON.stringify(templateData));
-        templateData.include = include.bind(templateData);
-        options.templateSettings.imports = { 'retrieve': retrieve };
-        options.filename = filepath;
-        try {
-        html = _.template(grunt.file.read(filepath), templateData, options.templateSettings);
-        } catch (error) {
-        grunt.log.error(error.message);
-        backtrace(templateData.files);
-        }
-        return html;
-      }).join(grunt.util.normalizelf(grunt.util.linefeed));
+    var processData = function () {
+      // Iterate over all specified file groups.
+      files.forEach(function (file) {
+        // Concat specified files.
+        var src = file.src.filter(function (filepath) {
+          // Warn on and remove invalid source files (if nonull was
+          // set).
+          if (!grunt.file.exists(filepath)) {
+            grunt.log.warn('Source file "' + filepath + '" not found.');
+            return false;
+          }
+          return true;
+        }).map(function (filepath) {
+          var html = '';
+          var templateData = _.extend({}, options.data, {
+            files : [ filepath ]
+          });
+          debug('Evaluate page "' + filepath + '" with templateData=' + JSON.stringify(templateData));
+          templateData.include = include.bind(templateData);
+          options.templateSettings.imports = {
+            'retrieve' : retrieve
+          };
+          options.filename = filepath;
+          try {
+            html = _.template(grunt.file.read(filepath), templateData, options.templateSettings);
+          } catch (error) {
+            grunt.log.error(error.message);
+            backtrace(templateData.files);
+          }
+          return html;
+        }).join(grunt.util.normalizelf(grunt.util.linefeed));
 
-      // Write the destination file.
-      grunt.file.write(file.dest, src);
+        // Write the destination file.
+        grunt.file.write(file.dest, src);
 
-      // Print a success message.
-      grunt.log.ok('Build HTML file to "' + file.dest + '"');
+        // Print a success message.
+        grunt.log.ok('Build HTML file to "' + file.dest + '"');
+      });
+    };
+
+    mkdirp.sync(options.remoteCacheFolder);
+    var files = this.files;
+    var task = this;
+    sync.fiber(function () {
+      var done = task.async();
+      processData(files);
+      done();
     });
   });
-
 };

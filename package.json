@@ -30,7 +30,8 @@
   },
   "dependencies": {
     "lodash": "~2.3.0",
-    "httpsync": "0.0.8"
+    "request": "^2.44.0",
+    "synchronize": "^0.9.8"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
