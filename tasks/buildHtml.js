@@ -86,8 +86,9 @@ module.exports = function (grunt) {
       } else {
         var remoteFragmentKey = getTemplateCacheKeyFromRemoteUrl(tplUrl);
         if (!_.has(cache, remoteFragmentKey)) {
-        cache[remoteFragmentKey] = retrieveFromUrl(tplUrl);
-        debug('Save ' + remoteFragmentKey + ' result in cache');
+          // TODO retrieve from FS
+          cache[remoteFragmentKey] = retrieveFromUrl(tplUrl);
+          debug('Save ' + remoteFragmentKey + ' result in cache');
         }
         html = getTemplateFromCache(remoteFragmentKey);
       }
