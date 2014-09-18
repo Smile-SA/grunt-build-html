@@ -87,7 +87,20 @@ If you set the templates root folder, it will serve as the key origin :
 * template : test/fragments/subfolder/my-content.html
 * templateNamespaceRoot : test/fragments
 * template key : subfolder/my-content
-                                      
+                               
+                               
+#### options.remoteCacheFolder
+Type: `String`
+Default: `.tmp/remote-cache`
+
+If null or empty, an error is thrown.
+
+```js
+options: {
+  remoteCacheFolder: '<%= config.tmp %>/.cache'
+}
+```
+                                   
 #### options.remoteUrl
 Type: `Object`
 Default: `empty`
