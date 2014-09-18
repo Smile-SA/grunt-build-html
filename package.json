@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "lodash": "~2.3.0",
-    "request": "~2.42.0"
+    "httpsync": "0.0.8"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
@@ -38,7 +38,6 @@
     "grunt-contrib-jshint": "~0.6.0",
     "grunt-contrib-nodeunit": "~0.2.0",
     "grunt-release": "~0.7.0",
-    "httpsync": "0.0.8",
     "load-grunt-tasks": "~0.6.0",
     "time-grunt": "~1.0.0"
   },
