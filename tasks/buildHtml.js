@@ -131,10 +131,7 @@ module.exports = function (grunt) {
         var request = httpsync.get({ url: tplUrl });
         var response = request.end();
         if (response.statusCode !== 200) {
-          var error = {
-            'message': 'An error has occured when trying to retrieve content from url "' + tplUrl + '"'
-          };
-          throw error;
+          throw new Error('An error has occured when trying to retrieve content from url "' + tplUrl + '"');
         }
         return response.data;
       };
