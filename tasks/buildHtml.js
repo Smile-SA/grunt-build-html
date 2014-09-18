@@ -93,7 +93,7 @@ module.exports = function (grunt) {
         tplUrl += urlSuffix;
       }
       var html = '';
-      debug('  retrieve remote content');
+      debug('  retrieve remote content from ' + tplUrl);
       var remoteFragmentKey = getTemplateCacheKeyFromRemoteUrl(tplUrl);
       if (data && !data.cache) {
         html = retrieveFromUrl(tplUrl, remoteFragmentKey, true);

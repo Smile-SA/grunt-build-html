@@ -21,7 +21,7 @@ module.exports = function (grunt) {
    */
   var isFragmentAvailable = function (fragmentKey, cachePath, skipCache, callback) {
     if (skipCache) {
-      debug('  cache is disabled');
+      debug('  cache is disabled so...');
       callback(false);
     } else {
       fs.exists(cachePath + '/' + fragmentKey, callback);
@@ -78,8 +78,9 @@ module.exports = function (grunt) {
           }
         });
       } else {
-        // get directly from file system
         fs.readFile(cachePath + '/' + fragmentKey, callback);
+        // get directly from file system
+        debug('  read content from file system');
       }
     });
   };
