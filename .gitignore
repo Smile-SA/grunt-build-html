@@ -11,7 +11,10 @@ pids
 logs
 results
 
-npm-debug.log
-node_modules
 .project
-/.tmp
+.idea
+
+.tmp
+
+node_modules
+npm-debug.log
