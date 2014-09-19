@@ -66,7 +66,7 @@ module.exports = function (grunt) {
       if (remoteUrl.indexOf('http') !== 0) {
         grunt.log.error('Something seems wrong with this remote url: ' + remoteUrl);
       }
-      return remoteUrl.toLowerCase().replace(/(\/|\?|\:)/g, '@');
+      return remoteUrl.toLowerCase().replace('://', '@@').replace(/\?/g, '@');
     };
 
     /**

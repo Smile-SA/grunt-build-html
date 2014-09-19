@@ -10,6 +10,8 @@
 module.exports = function (grunt) {
   var fs = require('fs');
   var request = require('request');
+  var path = require('path');
+  var mkdirp = require('mkdirp');
   var debug = grunt.log.debug;
 
   /**
@@ -53,6 +55,10 @@ module.exports = function (grunt) {
    */
   var dumpFragmentIntoCache = function (data, fragmentKey, cachePath, callback) {
     debug('  write content in file system');
+    var basePath =  path.dirname(fragmentKey);
+    if (basePath){
+    	mkdirp.sync(cachePath + '/' + basePath);
+    }
     fs.writeFile(cachePath + '/' + fragmentKey, data, function (err) {
       if (err) {
         callback(err);
