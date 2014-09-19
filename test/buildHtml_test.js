@@ -58,6 +58,12 @@ exports.buildHtml = {
     test.equal(actual, expected, 'test the correct behavior with namespaced templates');
     test.done();
   },
+  includeContentHelloWorldFromVeryDeepSubfolder: function(test) {
+    var actual = grunt.file.read(tmpFolder + '/include-content-hello-world-from-very-long-url.html');
+    var expected = grunt.file.read('test/expected/include-content-hello-world-from-very-long-url.html');
+    test.equal(actual, expected, 'test the correct behavior with very long remote url');
+    test.done();
+  },
   missingParamDefault: function(test) {
     var actual = grunt.file.read(tmpFolder + '/missing-params-default.html');
     var expected = grunt.file.read('test/expected/missing-params-default.html');
