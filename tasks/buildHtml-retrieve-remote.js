@@ -57,7 +57,7 @@ module.exports = function (grunt) {
     debug('  write content in file system');
     var basePath =  path.dirname(fragmentKey);
     if (basePath){
-    	mkdirp.sync(cachePath + '/' + basePath);
+      mkdirp.sync(cachePath + '/' + basePath);
     }
     fs.writeFile(cachePath + '/' + fragmentKey, data, function (err) {
       if (err) {
