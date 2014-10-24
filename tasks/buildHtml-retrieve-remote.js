@@ -3,6 +3,8 @@
  * https://github.com/Smile-SA/grunt-build-html
  *
  * Licensed under the MIT license.
+ *
+ * Based on the initial work of Fabien Rassinier and Romain Gonord
  */
 
 'use strict';

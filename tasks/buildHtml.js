@@ -3,6 +3,8 @@
  * https://github.com/Smile-SA/grunt-build-html
  *
  * Licensed under the MIT license.
+ *
+ * Based on the initial work of Tony Cabaye
  */
 
 'use strict';
@@ -115,8 +117,12 @@ module.exports = function (grunt) {
      * @param data The data object used to populate the text.
      * @returns {string} Compiled template content
      */
-    var include = function (tplName, data) {
+    var include = function (tplName, data, ignoreEvaluation) {
       var files, templateData, html = '';
+      if (typeof data !== 'object') {
+        ignoreEvaluation = data;
+        data = {};
+      }
       data = _.extend({}, options.data, data);
       if (_.has(templates, tplName)) {
         debug('  include ' + templates[tplName].filepath);
@@ -127,7 +133,11 @@ module.exports = function (grunt) {
         };
         data.include = include.bind(templateData);
         try {
-          html = _.template(templates[tplName].content, data, options.templateSettings);
+          if (ignoreEvaluation) {
+            html = templates[tplName].content;
+          } else {
+            html = _.template(templates[tplName].content, data, options.templateSettings);
+          }
         } catch (error) {
           grunt.log.error(error.message);
           backtrace(files);

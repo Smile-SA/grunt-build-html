@@ -170,6 +170,17 @@ In this example we will define a list of templates that will be processed using 
 <%= _.map(params, function(key){return include(key);}).join('\n')  %>
 ```
 
+#### Ignore sub fragment processing
+By default, included fragment will be recursively processed.
+If you want to prevent the plugin to parse and evaluate your fragment, just add 'true' to the include function :
+
+```
+<%= include('my-fragment', true) %>
+<%= include('my-fragment', {params: ['header', 'my-page-content', 'footer']}, true) %>
+```
+
+This is quite handy when dealing with fragment containing code that should not be processed at build time but only run time.
+
 ### Troubleshooting
 You can launch your task with the `--debug` option to get more debug informations.
 

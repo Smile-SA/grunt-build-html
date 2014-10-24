@@ -24,10 +24,6 @@ var grunt = require('grunt');
 var tmpFolder = '.tmp';
 
 exports.buildHtml = {
-  setUp: function(done) {
-    // setup here if necessary
-    done();
-  },
   nothingToDo: function(test) {
     var actual = grunt.file.read(tmpFolder + '/nothing-to-do.html');
     var expected = grunt.file.read('test/expected/simple-hello-world.html');
@@ -98,6 +94,12 @@ exports.buildHtml = {
     var actual = grunt.file.read(tmpFolder + '/simple-skeleton-with-remote-submodule.html');
     var expected = grunt.file.read('test/expected/simple-hello-world.html');
     test.equal(actual, expected, 'a simple skeleton is loaded with 2 params set, one of them is a remote submodule.');
+    test.done();
+  },
+  stopNestedEvaluation: function(test) {
+    var actual = grunt.file.read(tmpFolder + '/simple-hello-world-without-nested-evalation.html');
+    var expected = grunt.file.read('test/expected/simple-hello-world-without-nested-evalation.html');
+    test.equal(actual, expected, 'submodule should not be evaluated !');
     test.done();
   }
 };
