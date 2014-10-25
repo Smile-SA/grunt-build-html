@@ -2,9 +2,9 @@
 <html>
 
   <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Grunt-build-html : Build HTML templates recursively" />
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Grunt-build-html : Build HTML templates recursively">
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
@@ -16,14 +16,14 @@
     <!-- HEADER -->
     <div id="header_wrap" class="outer">
         <header class="inner">
-          <a id="forkme_banner" href="https://github.com/tonai/grunt-build-html">View on GitHub</a>
+          <a id="forkme_banner" href="https://github.com/Smile-SA/grunt-build-html">View on GitHub</a>
 
           <h1 id="project_title">Grunt-build-html</h1>
           <h2 id="project_tagline">Build HTML templates recursively</h2>
 
             <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/tonai/grunt-build-html/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/tonai/grunt-build-html/tarball/master">Download this project as a tar.gz file</a>
+              <a class="zip_download_link" href="https://github.com/Smile-SA/grunt-build-html/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/Smile-SA/grunt-build-html/tarball/master">Download this project as a tar.gz file</a>
             </section>
         </header>
     </div>
@@ -45,8 +45,8 @@
 
 <p>If you haven't used <a href="http://gruntjs.com/">Grunt</a> before, be sure to check out the <a href="http://gruntjs.com/getting-started">Getting Started</a> guide, as it explains how to create a <a href="http://gruntjs.com/sample-gruntfile">Gruntfile</a> as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:</p>
 
-<pre lang="shell"><code>npm install grunt-build-html --save-dev
-</code></pre>
+<div class="highlight highlight-shell"><pre>npm install grunt-build-html --save-dev
+</pre></div>
 
 <p>Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:</p>
 
@@ -54,15 +54,15 @@
 </pre></div>
 
 <h2>
-<a name="the-build_html-task" class="anchor" href="#the-build_html-task"><span class="octicon octicon-link"></span></a>The "build_html" task</h2>
+<a name="the-buildhtml-task" class="anchor" href="#the-buildhtml-task"><span class="octicon octicon-link"></span></a>The "buildHtml" task</h2>
 
 <h3>
 <a name="overview" class="anchor" href="#overview"><span class="octicon octicon-link"></span></a>Overview</h3>
 
-<p>In your project's Gruntfile, add a section named <code>build_html</code> to the data object passed into <code>grunt.initConfig()</code>.</p>
+<p>In your project's Gruntfile, add a section named <code>buildHtml</code> to the data object passed into <code>grunt.initConfig()</code>.</p>
 
 <div class="highlight highlight-js"><pre><span class="nx">grunt</span><span class="p">.</span><span class="nx">initConfig</span><span class="p">({</span>
-  <span class="nx">build_html</span><span class="o">:</span> <span class="p">{</span>
+  <span class="nx">buildHtml</span><span class="o">:</span> <span class="p">{</span>
     <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
       <span class="c1">// Task-specific options go here.</span>
     <span class="p">},</span>
@@ -132,11 +132,43 @@ If you set the templates root folder, it will serve as the key origin :</p>
 <li>template : test/fragments/subfolder/my-content.html</li>
 <li>templateNamespaceRoot : test/fragments</li>
 <li>template key : subfolder/my-content</li>
-</ul><h3>
+</ul>
+
+<h4>
+<a name="optionsremotecachefolder" class="anchor" href="#optionsremotecachefolder"><span class="octicon octicon-link"></span></a>options.remoteCacheFolder</h4>
+
+<p>Type: <code>String</code>
+Default: <code>.tmp/remote-cache</code></p>
+
+<p>If null or empty, an error is thrown.</p>
+
+<div class="highlight highlight-js"><pre><span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+  <span class="nx">remoteCacheFolder</span><span class="o">:</span> <span class="s1">'&lt;%= config.tmp %&gt;/.cache'</span>
+<span class="p">}</span>
+</pre></div>
+
+<h4>
+<a name="optionsremoteurl" class="anchor" href="#optionsremoteurl"><span class="octicon octicon-link"></span></a>options.remoteUrl</h4>
+
+<p>Type: <code>Object</code>
+Default: <code>empty</code></p>
+
+<p>If empty, each URL will be called without transformation.
+If you set prefix and/or suffix, they will be appended to all URL.</p>
+
+<div class="highlight highlight-js"><pre><span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+  <span class="nx">remoteUrl</span><span class="o">:</span> <span class="p">{</span>     
+    <span class="nx">prefix</span><span class="o">:</span> <span class="s1">'http://www.domain.com'</span><span class="p">,</span>
+    <span class="nx">suffix</span><span class="o">:</span> <span class="s1">'.html'</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<h3>
 <a name="usage-examples" class="anchor" href="#usage-examples"><span class="octicon octicon-link"></span></a>Usage Examples</h3>
 
 <div class="highlight highlight-js"><pre><span class="nx">grunt</span><span class="p">.</span><span class="nx">initConfig</span><span class="p">({</span>
-  <span class="nx">build_html</span><span class="o">:</span> <span class="p">{</span>
+  <span class="nx">buildHtml</span><span class="o">:</span> <span class="p">{</span>
     <span class="nx">dev</span><span class="o">:</span> <span class="p">{</span>
       <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
         <span class="nx">templates</span><span class="o">:</span> <span class="s1">'dev/fragments/**/*.html'</span>
@@ -190,6 +222,18 @@ If you set the templates root folder, it will serve as the key origin :</p>
 <pre><code>&lt;%= _.map(params, function(key){return include(key);}).join('\n')  %&gt;
 </code></pre>
 
+<h4>
+<a name="ignore-sub-fragment-processing" class="anchor" href="#ignore-sub-fragment-processing"><span class="octicon octicon-link"></span></a>Ignore sub fragment processing</h4>
+
+<p>By default, included fragment will be recursively processed.
+If you want to prevent the plugin to parse and evaluate your fragment, just add 'true' to the include function :</p>
+
+<pre><code>&lt;%= include('my-fragment', true) %&gt;
+&lt;%= include('my-fragment', {params: ['header', 'my-page-content', 'footer']}, true) %&gt;
+</code></pre>
+
+<p>This is quite handy when dealing with fragment containing code that should not be processed at build time but only run time.</p>
+
 <h3>
 <a name="troubleshooting" class="anchor" href="#troubleshooting"><span class="octicon octicon-link"></span></a>Troubleshooting</h3>
 
@@ -212,7 +256,7 @@ If you set the templates root folder, it will serve as the key origin :</p>
     <!-- FOOTER  -->
     <div id="footer_wrap" class="outer">
       <footer class="inner">
-        <p class="copyright">Grunt-build-html maintained by <a href="https://github.com/tonai">tonai</a></p>
+        <p class="copyright">Grunt-build-html maintained by <a href="https://github.com/Smile-SA">Smile-SA</a></p>
         <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
       </footer>
     </div>
