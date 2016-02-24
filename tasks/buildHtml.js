@@ -26,7 +26,7 @@ module.exports = function (grunt) {
   };
 
   grunt.registerMultiTask('buildHtml', 'Build HTML templates recursively.', function () {
-    var datapath, urlPrefix, urlSuffix;
+    var datapath, urlPrefix, urlSuffix, retrieveFromUrl;
     var templates = {};
     var cache = {};
 
@@ -136,7 +136,7 @@ module.exports = function (grunt) {
           if (ignoreEvaluation) {
             html = templates[tplName].content;
           } else {
-            html = _.template(templates[tplName].content, data, options.templateSettings);
+            html = _.template(templates[tplName].content, options.templateSettings)(data);
           }
         } catch (error) {
           grunt.log.error(error.message);
@@ -156,7 +156,7 @@ module.exports = function (grunt) {
      * @param skipCache If true, request is processed without cache
      * @returns {*} Remote content data
      */
-    var retrieveFromUrl = function (tplUrl, fragmentKey, skipCache) {
+    retrieveFromUrl = function (tplUrl, fragmentKey, skipCache) {
       // get fragment synchronously ='(
       return sync.await(retrieveRemote(tplUrl, fragmentKey, options.remoteCacheFolder, skipCache, sync.defer()));
     };
@@ -179,7 +179,7 @@ module.exports = function (grunt) {
       };
     });
     grunt.log.ok(_.size(this.files) + ' HTML file' + (_.size(this.files) > 0 ? 's' : '') + ' found to build');
-    var processData = function () {
+    var processData = function (files) {
       // Iterate over all specified file groups.
       files.forEach(function (file) {
         // Concat specified files.
@@ -203,7 +203,7 @@ module.exports = function (grunt) {
           });
           options.filename = filepath;
           try {
-            html = _.template(grunt.file.read(filepath), templateData, options.templateSettings);
+            html = _.template(grunt.file.read(filepath), options.templateSettings)(templateData);
           } catch (error) {
             grunt.log.error(error.message);
             backtrace(templateData.files);
@@ -221,13 +221,13 @@ module.exports = function (grunt) {
 
     // Sync in FS
     mkdirp.sync(options.remoteCacheFolder);
-    var files = this.files;
-    var task = this;
+    /*var files = this.files;
+    var task = this;*/
     // Work with asynchronous HTTP requests
     sync.fiber(function () {
-      var done = task.async();
-      processData(files);
+      var done = this.async();
+      processData(this.files);
       done();
-    });
+    }.bind(this));
   });
 };
